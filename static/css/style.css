@@ -1,0 +1,218 @@
+/* styles.css */
+:root {
+  --primary: #1a237e;
+  --secondary: #c2185b;
+  --accent: #00acc1;
+  --dark: #121858;
+  --light: #f5f6fa;
+}
+
+/* Navbar Styling */
+.navbar {
+  background: var(--primary) !important;
+  padding: 15px 0;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  font-size: 24px;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.navbar-brand::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+
+.navbar-brand:hover::after {
+  transform: scaleX(1);
+}
+
+.nav-link {
+  font-weight: 500;
+  margin: 0 10px;
+  padding: 8px 16px !important;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--accent) !important;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(
+      135deg,
+      rgba(26, 35, 126, 0.95),
+      rgba(18, 24, 88, 0.95)
+    ),
+    url("/static/images/sports-bg.jpg") center/cover;
+  padding: 120px 0;
+  color: white;
+}
+
+.hero-section h1 {
+  font-size: 48px;
+  margin-bottom: 24px;
+  font-weight: 800;
+}
+
+.hero-section .lead {
+  font-size: 20px;
+  margin-bottom: 32px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+.card-body {
+  padding: 24px;
+}
+
+.card-title {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 16px;
+}
+
+.card-text {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.btn {
+  padding: 12px 28px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--primary);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--dark);
+  transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* Community Section */
+.bg-dark {
+  background: linear-gradient(135deg, var(--primary), var(--dark)) !important;
+}
+
+/* Footer */
+footer {
+  background: var(--dark);
+  padding: 60px 0 30px;
+}
+
+footer h5 {
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+footer h5::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: var(--accent);
+}
+
+footer a {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+  margin: 8px 15px;
+}
+
+footer a:hover {
+  color: var(--accent) !important;
+  transform: translateY(-2px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 80px 0;
+  }
+
+  .hero-section h1 {
+    font-size: 36px;
+  }
+
+  .card-img-top {
+    height: 180px;
+  }
+}
+
+/* Adding smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Adding loading animation for images */
+.card-img-top {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
