@@ -1,148 +1,79 @@
-{% extends "layout.html" %} 
-{% load static %} 
-{% block title %}Register{% endblock %} 
-
-{% block content %}
-<section class="bg-gradient-custom text-white py-4">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-6">
-        <div class="card border-0 shadow-custom">
-          <div class="card-body p-4 p-md-5">
-            <div class="text-center mb-4">
-              <h2 class="fw-bold text-dark">Join SportsEdge</h2>
-              <p class="text-muted">Create your account to get started</p>
-            </div>
-
-            <form
-              method="post"
-              action="{% url 'register' %}"
-              class="needs-validation"
-              novalidate
-            >
-              {% csrf_token %} 
-              {% if form.errors %}
-              <div class="alert alert-danger">
-                <strong>Please correct the following errors:</strong>
-                <ul class="mb-0">
-                  {% for field, errors in form.errors.items %} 
-                    {% for error in errors %}
-                      <li>{{ error }}</li>
-                    {% endfor %} 
-                  {% endfor %}
-                </ul>
-              </div>
-              {% endif %} 
-              
-              {% for field in form %}
-                <div class="mb-4">
-                  <label
-                    for="{{ field.id_for_label }}"
-                    class="form-label text-dark"
-                  >
-                    {{ field.label }} 
-                    {% if field.field.required %}
-                      <span class="text-danger">*</span>
-                    {% endif %}
-                  </label>
-                  {{ field.errors }}
-                  <div class="input-group">{{ field }}</div>
-                  {% if field.help_text %}
-                    <small class="form-text text-muted"
-                      >{{ field.help_text }}</small
-                    >
-                  {% endif %}
-                </div>
-              {% endfor %}
-
-              <div class="d-grid gap-2 mt-4">
-                <button type="submit" class="btn btn-custom btn-primary btn-lg">
-                  Create Account
-                </button>
-              </div>
-
-              <p class="text-center mt-4 mb-0">
-                Already have an account?
-                <a
-                  href="{% url 'login' %}"
-                  class="text-primary text-decoration-none"
-                  >Sign in</a
-                >
-              </p>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<style>
-  .form-control {
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
-    font-size: 1rem;
-  }
-
-  .form-control:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
-  }
-
-  .form-label {
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-
-  .errorlist {
-    list-style: none;
-    padding-left: 0;
-    margin-bottom: 0.5rem;
-    color: var(--secondary-color);
-    font-size: 0.875rem;
-  }
-
-  .form-text {
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-  }
-
-  .btn-custom:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.15);
-  }
-
-  .card {
-    border-radius: 15px;
-    overflow: hidden;
-  }
-
-  .card-body {
-    background-color: #fff;
-  }
-
-  @media (max-width: 768px) {
-    .card-body {
-      padding: 2rem !important;
-    }
-  }
-</style>
-
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const formFields = document.querySelectorAll(".form-control");
+
     formFields.forEach((field) => {
       field.classList.add("form-control");
       if (field.required) {
         field.classList.add("required");
       }
+
+      field.addEventListener("input", function () {
+        const errorContainer = field.nextElementSibling;
+        if (errorContainer && errorContainer.classList.contains("errorlist")) {
+          errorContainer.style.display = field.checkValidity() ? "none" : "block";
+        }
+        field.classList.toggle("is-invalid", !field.checkValidity());
+        field.classList.toggle("is-valid", field.checkValidity());
+      });
     });
 
     const passwordField = document.querySelector('input[type="password"]');
     if (passwordField) {
-      passwordField.addEventListener("input", function () {});
+      const strengthIndicator = document.createElement("div");
+      strengthIndicator.className = "password-strength";
+      passwordField.parentNode.appendChild(strengthIndicator);
+
+      passwordField.addEventListener("input", function () {
+        const password = passwordField.value;
+        const strength = getPasswordStrength(password);
+
+        strengthIndicator.textContent = `Strength: ${strength.level}`;
+        strengthIndicator.style.color = strength.color;
+
+        passwordField.classList.toggle("is-valid", strength.isStrong);
+        passwordField.classList.toggle("is-invalid", !strength.isStrong);
+      });
+
+      function getPasswordStrength(password) {
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/\d/.test(password)) score++;
+        if (/[@$!%*?&#]/.test(password)) score++;
+
+        if (score === 5) {
+          return { level: "Strong", color: "green", isStrong: true };
+        } else if (score >= 3) {
+          return { level: "Medium", color: "orange", isStrong: false };
+        } else {
+          return { level: "Weak", color: "red", isStrong: false };
+        }
+      }
+    }
+
+    const form = document.querySelector("form.needs-validation");
+    if (form) {
+      form.addEventListener("submit", function (event) {
+        let isValid = true;
+
+        formFields.forEach((field) => {
+          if (!field.checkValidity()) {
+            isValid = false;
+            field.classList.add("is-invalid");
+          } else {
+            field.classList.remove("is-invalid");
+            field.classList.add("is-valid");
+          }
+        });
+
+        if (!isValid) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add("was-validated");
+      });
     }
   });
 </script>
-{% endblock %}
