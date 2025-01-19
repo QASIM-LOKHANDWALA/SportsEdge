@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ChessConfig(AppConfig):
+class UserAuthenticationConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'chess'
+    name = 'user_authentication'
