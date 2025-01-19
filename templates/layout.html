@@ -127,6 +127,18 @@
       .hover-effect:hover {
         transform: translateY(-5px);
       }
+
+      {% comment %} ScrollBar {% endcomment %}
+      ::-webkit-scrollbar{
+        width: 15px;
+      }
+      ::-webkit-scrollbar-track{
+        background: var(--dark-gray);
+      }
+      ::-webkit-scrollbar-thumb{
+        background: var(--secondary-color);
+        border-radius: 8px;
+      }
     </style>
   </head>
 
@@ -161,13 +173,15 @@
               <li class="nav-item">
                 <a class="nav-link" href="/baseball">Baseball</a>
               </li>
-              <li class="nav-item ms-2">
+              {% if not user.is_authenticated %}
+                <li class="nav-item ms-2">
                 <a
                   class="nav-link btn btn-custom btn-primary px-4"
-                  href="/register"
+                  href="{% url "register" %}"
                   >Sign Up</a
                 >
               </li>
+              {% endif %}
             </ul>
           </div>
         </div>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SportsEdge</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #e74c3c;
+        --accent-color: #3498db;
+        --light-gray: #f8f9fa;
+        --dark-gray: #343a40;
+      }
+
+      .text-secondary-color {
+        color: var(--secondary-color);
+      }
+      
+      .text-primary-color {
+        color: var(--primary-color);
+      }
+      
+      .badge {
+        transition: all 0.3s ease;
+      }
+      
+      .badge:hover {
+        background-color: var(--secondary-color) !important;
+        color: white !important;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="min-vh-100 d-flex align-items-center bg-light py-5">
+      <div class="container text-center">
+          <div class="row justify-content-center">
+              <div class="col-md-8 col-lg-6">
+                  <div class="mb-4">
+                      <i class="fas fa-exclamation-circle text-secondary-color" style="font-size: 6rem;"></i>
+                  </div>
+                  
+                  <h1 class="display-1 fw-bold text-secondary-color mb-3">404</h1>
+                  <h2 class="h3 fw-bold text-primary-color mb-4">Oops! Page Not Found</h2>
+                  <p class="lead text-muted mb-5">
+                      Looks like you've wandered off the field! The page you're looking for might have been moved, deleted, or never existed.
+                  </p>
+                  
+                  <div class="d-flex justify-content-center gap-3">
+                      <a href="/" class="btn btn-custom btn-primary">
+                          <i class="fas fa-home me-2"></i>Return Home
+                      </a>
+                      <a href="/contact" class="btn btn-custom btn-outline-primary">
+                          <i class="fas fa-envelope me-2"></i>Contact Support
+                      </a>
+                  </div>
+                  
+                  <div class="mt-5">
+                      <h6 class="text-muted mb-3">Or check out these popular sections:</h6>
+                      <div class="d-flex justify-content-center flex-wrap gap-2">
+                          <a href="/cricket" class="badge bg-light text-dark text-decoration-none p-2">
+                              <i class="fas fa-cricket-ball me-1"></i>Cricket
+                          </a>
+                          <a href="/basketball" class="badge bg-light text-dark text-decoration-none p-2">
+                              <i class="fas fa-basketball me-1"></i>Basketball
+                          </a>
+                          <a href="/football" class="badge bg-light text-dark text-decoration-none p-2">
+                              <i class="fas fa-futbol me-1"></i>Football
+                          </a>
+                          <a href="/chess" class="badge bg-light text-dark text-decoration-none p-2">
+                              <i class="fas fa-chess me-1"></i>Chess
+                          </a>
+                          <a href="/baseball" class="badge bg-light text-dark text-decoration-none p-2">
+                              <i class="fas fa-baseball-ball me-1"></i>Baseball
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </section>
+  </body>
+</html>

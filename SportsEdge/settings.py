@@ -27,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)$4cvksjsp&kuf74*ga2(i-qh-ti*@!bh2l1_8r6k(1%d^h#%0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -48,6 +48,8 @@ INSTALLED_APPS = [
 AUTHENTICATION_BACKEND = [
     'django.contrib.auth.backends.ModelBackend'
 ]
+
+LOGIN_URL = 'authentication/login/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

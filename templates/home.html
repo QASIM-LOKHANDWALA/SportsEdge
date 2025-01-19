@@ -13,7 +13,7 @@
           your favorite sports, all in one place.
         </p>
         <div class="d-flex gap-3">
-          <a href="/register" class="btn btn-custom btn-primary">Get Started</a>
+          <a href="{% url "register" %}" class="btn btn-custom btn-primary">Get Started</a>
           <a href="/about" class="btn btn-custom btn-outline-light"
             >Learn More</a
           >
@@ -154,7 +154,7 @@
       Get exclusive access to premium content, personalized updates, and connect
       with fellow sports enthusiasts.
     </p>
-    <a href="/register" class="btn btn-custom btn-light btn-lg">Sign Up Now</a>
+    <a href="{% url "register" %}" class="btn btn-custom btn-light btn-lg">Sign Up Now</a>
   </div>
 </section>
 {% endblock %}
