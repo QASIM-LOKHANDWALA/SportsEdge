@@ -10,6 +10,6 @@ def homepage(request):
 
 @login_required
 def dashboard(request):
-  news = get_latest_news()
-  context = {news:news}
+  news_data = get_latest_news()
+  context = {"news_data":news_data}
   return render(request,'dashboard.html',context)
