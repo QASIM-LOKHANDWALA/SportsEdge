@@ -25,5 +25,6 @@ urlpatterns = [
     path('',views.homepage,name='home'),
     path('dashboard/',views.dashboard,name='dashboard'),
     path('football/',include('football.urls')),
+    path('cricket/',include('cricket.urls')),
     path('authentication/',include('user_authentication.urls')),
 ]

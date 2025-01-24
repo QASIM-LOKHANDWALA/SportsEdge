@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'user_authentication',
-    'football'
+    'football',
+    'cricket',
 ]
 
 AUTHENTICATION_BACKEND = [
