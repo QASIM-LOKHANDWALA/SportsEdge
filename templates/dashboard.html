@@ -3,6 +3,9 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+<script>
+    console.log(news)
+</script>
 <section class="py-5">
     <div class="container position-relative">
         <h1 class="fs-2 fw-semibold">Latest News</h1>
@@ -16,9 +19,17 @@
             </div>
 
             <div class="carousel-inner" style="height: 450px; overflow: hidden;">
-                {% for news in news_data %}
-                    {% include "components/news_card.html" with news=news %}
-                {% endfor %}
+                <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+                    {% if news_data %}
+                        <div class="carousel-inner" style="height: 450px; overflow: hidden;">
+                            {% for news in news_data %}
+                                {% include "components/news_card.html" with news=news %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-center text-muted">No news available at the moment. Please try again later.</p>
+                    {% endif %}
+                </div>
             </div>
 
             <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">

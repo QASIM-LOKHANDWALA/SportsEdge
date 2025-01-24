@@ -22,7 +22,6 @@ class CricketDataAPI:
       if response.status_code == 200:
         data = response.json()
         matches = data.get('data')
-        print(matches)
         return matches
       
       else:
@@ -47,7 +46,6 @@ class CricketDataAPI:
       if response.status_code == 200:
         data = response.json()
         series = data.get('data')
-        print(series)
         return series
       
       else:

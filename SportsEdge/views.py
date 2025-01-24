@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from .api_functions import get_latest_news
 
 def homepage(request):
   if request.user.is_authenticated:
-    return render(request,'dashboard.html')
+    return redirect('dashboard')
   else:
     return render(request,'home.html')
 

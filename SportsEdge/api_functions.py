@@ -28,7 +28,6 @@ def get_latest_news():
                 if title and title not in titles and language == "en":
                     titles.add(title)
                     filtered_news.append(item)
-            
             return filtered_news
         else:
             raise Exception(f"Error: Received status code {response.status_code} from API.")

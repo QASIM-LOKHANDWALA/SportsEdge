@@ -12,7 +12,7 @@ def cricket_home_page(request):
       'current_matches': current_matches,
       'cricket_series': cricket_series
     }
-    return render(request, 'cricket_home.html', context)
+    return render(request, 'cricket/cricket_home.html', context)
     
   except Exception as e:
     context = {
