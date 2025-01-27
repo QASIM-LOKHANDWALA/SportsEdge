@@ -1,64 +1,82 @@
-{% extends "layout.html" %} 
-{% load static %} 
+{% extends "layout.html" %}
+{% load static %}
 
-{% block title %}Cricket{% endblock %} 
+{% block title %}Cricket{% endblock %}
 
 {% block content %}
 <section class="py-5 bg-light mt-3">
   <div class="container">
     <h2 class="text-center fw-bold mb-5">Current Matches</h2>
-    <div class="row g-4">
-      {% if current_matches %} {% for match in current_matches %}
-      <div class="col-md-6">
-        <div class="card border-0 shadow-custom hover-effect h-100">
-          <div class="card-body">
-            <h5 class="card-title text-primary">{{ match.name }}</h5>
-            <p class="card-text">
-              <strong>Status:</strong> {{ match.status }}<br />
-              <strong>Type:</strong> {{ match.matchType|title }}<br />
-              <strong>Venue:</strong> {{ match.venue }}<br />
-              <strong>Date:</strong> {{ match.date }}
-            </p>
-            <div class="score-section">
-              <h6 class="fw-bold">Score:</h6>
-              {% for score in match.score %}
-              <p class="mb-1">
-                <strong>{{ score.inning }}</strong>: {{ score.r }} / {{ score.w }} in {{ score.o }} overs
+    <div class="swiper currentMatchesSwiper">
+      <div class="swiper-wrapper">
+        {% if current_matches %}
+        {% for match in current_matches %}
+        <div class="swiper-slide">
+          <div class="card border-0 shadow-custom h-100">
+            <div class="card-body">
+              <h5 class="card-title text-primary">{{ match.name }}</h5>
+              <p class="card-text">
+                <strong>Status:</strong> {{ match.status }}<br>
+                <strong>Type:</strong> {{ match.matchType|title }}<br>
+                <strong>Venue:</strong> {{ match.venue }}<br>
+                <strong>Date:</strong> {{ match.date }}
               </p>
-              {% endfor %}
+              <div class="score-section">
+                <h6 class="fw-bold">Score:</h6>
+                {% for score in match.score %}
+                <p class="mb-1">
+                  <strong>{{ score.inning }}</strong>: {{ score.r }} / {{ score.w }} in {{ score.o }} overs
+                </p>
+                {% endfor %}
+              </div>
             </div>
           </div>
         </div>
+        {% endfor %}
+        {% else %}
+        <div class="swiper-slide">
+          <p class="text-muted text-center">No current matches available.</p>
+        </div>
+        {% endif %}
       </div>
-      {% endfor %} {% else %}
-      <p class="text-muted text-center">No current matches available.</p>
-      {% endif %}
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
     </div>
 
     <h2 class="text-center fw-bold my-5">Cricket Series</h2>
-    <div class="row g-4">
-      {% if cricket_series %} {% for series in cricket_series %}
-      <div class="col-md-4">
-        <div class="card border-0 shadow-custom hover-effect h-100">
-          <div class="card-body">
-            <h5 class="card-title text-primary">{{ series.name }}</h5>
-            <p class="card-text">
-              <strong>Start Date:</strong> {{ series.startDate }}<br />
-              <strong>End Date:</strong> {{ series.endDate }}<br />
-              <strong>Matches:</strong> {{ series.matches }}<br />
-              <strong>Teams:</strong> {{ series.squads }}
-            </p>
-            <ul class="list-unstyled">
-              <li><strong>ODI:</strong> {{ series.odi }}</li>
-              <li><strong>T20:</strong> {{ series.t20 }}</li>
-              <li><strong>Test:</strong> {{ series.test }}</li>
-            </ul>
+    <div class="swiper seriesSwiper">
+      <div class="swiper-wrapper">
+        {% if cricket_series %}
+        {% for series in cricket_series %}
+        <div class="swiper-slide">
+          <div class="card border-0 shadow-custom h-100">
+            <div class="card-body">
+              <h5 class="card-title text-primary">{{ series.name }}</h5>
+              <p class="card-text">
+                <strong>Start Date:</strong> {{ series.startDate }}<br>
+                <strong>End Date:</strong> {{ series.endDate }}<br>
+                <strong>Matches:</strong> {{ series.matches }}<br>
+                <strong>Teams:</strong> {{ series.squads }}
+              </p>
+              <ul class="list-unstyled">
+                <li><strong>ODI:</strong> {{ series.odi }}</li>
+                <li><strong>T20:</strong> {{ series.t20 }}</li>
+                <li><strong>Test:</strong> {{ series.test }}</li>
+              </ul>
+            </div>
           </div>
         </div>
+        {% endfor %}
+        {% else %}
+        <div class="swiper-slide">
+          <p class="text-muted text-center">No cricket series available.</p>
+        </div>
+        {% endif %}
       </div>
-      {% endfor %} {% else %}
-      <p class="text-muted text-center">No cricket series available.</p>
-      {% endif %}
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
     </div>
   </div>
 </section>
@@ -68,8 +86,8 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 
-  .hover-effect:hover {
-    transform: scale(1.02);
+  .card:hover {
+    transform: translateY(-5px);
     transition: transform 0.3s ease;
   }
 
@@ -77,5 +95,93 @@
     font-size: 0.95rem;
     color: #6c757d;
   }
+
+  .swiper {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 50px;
+  }
+
+  .swiper-slide {
+    height: auto;
+    padding: 10px;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #0d6efd;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: #0d6efd;
+  }
+
+  .card {
+    width: 100%;
+    margin: 0 auto;
+  }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const currentMatchesSwiper = new Swiper(".currentMatchesSwiper", {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 30,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+      },
+      autoHeight: true,
+    });
+
+    const seriesSwiper = new Swiper(".seriesSwiper", {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 30,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+      },
+      autoHeight: true,
+    });
+  });
+</script>
 {% endblock %}
