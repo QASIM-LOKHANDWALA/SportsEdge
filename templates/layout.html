@@ -181,6 +181,13 @@
                   >Sign Up</a
                 >
               </li>
+              {% else %}
+                <li class="nav-item ms-2">
+                <a
+                  class="nav-link btn btn-custom btn-primary px-4"
+                  href="{% url "logout" %}"
+                  >Logout</a
+                >
               {% endif %}
             </ul>
           </div>
