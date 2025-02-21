@@ -12,22 +12,24 @@
         {% if current_matches %}
         {% for match in current_matches %}
         <div class="swiper-slide">
-          <div class="card border-0 shadow-custom h-100">
-            <div class="card-body">
+          <div class="card border-0 shadow-custom">
+            <div class="card-body card-fixed-height">
               <h5 class="card-title text-primary">{{ match.name }}</h5>
-              <p class="card-text">
-                <strong>Status:</strong> {{ match.status }}<br>
-                <strong>Type:</strong> {{ match.matchType|title }}<br>
-                <strong>Venue:</strong> {{ match.venue }}<br>
-                <strong>Date:</strong> {{ match.date }}
-              </p>
-              <div class="score-section">
-                <h6 class="fw-bold">Score:</h6>
-                {% for score in match.score %}
-                <p class="mb-1">
-                  <strong>{{ score.inning }}</strong>: {{ score.r }} / {{ score.w }} in {{ score.o }} overs
+              <div class="scrollable-content">
+                <p class="card-text">
+                  <strong>Status:</strong> {{ match.status }}<br>
+                  <strong>Type:</strong> {{ match.matchType|title }}<br>
+                  <strong>Venue:</strong> {{ match.venue }}<br>
+                  <strong>Date:</strong> {{ match.date }}
                 </p>
-                {% endfor %}
+                <div class="score-section">
+                  <h6 class="fw-bold">Score:</h6>
+                  {% for score in match.score %}
+                  <p class="mb-1">
+                    <strong>{{ score.inning }}</strong>: {{ score.r }} / {{ score.w }} in {{ score.o }} overs
+                  </p>
+                  {% endfor %}
+                </div>
               </div>
             </div>
           </div>
@@ -50,20 +52,22 @@
         {% if cricket_series %}
         {% for series in cricket_series %}
         <div class="swiper-slide">
-          <div class="card border-0 shadow-custom h-100">
-            <div class="card-body">
+          <div class="card border-0 shadow-custom">
+            <div class="card-body card-fixed-height">
               <h5 class="card-title text-primary">{{ series.name }}</h5>
-              <p class="card-text">
-                <strong>Start Date:</strong> {{ series.startDate }}<br>
-                <strong>End Date:</strong> {{ series.endDate }}<br>
-                <strong>Matches:</strong> {{ series.matches }}<br>
-                <strong>Teams:</strong> {{ series.squads }}
-              </p>
-              <ul class="list-unstyled">
-                <li><strong>ODI:</strong> {{ series.odi }}</li>
-                <li><strong>T20:</strong> {{ series.t20 }}</li>
-                <li><strong>Test:</strong> {{ series.test }}</li>
-              </ul>
+              <div class="scrollable-content">
+                <p class="card-text">
+                  <strong>Start Date:</strong> {{ series.startDate }}<br>
+                  <strong>End Date:</strong> {{ series.endDate }}<br>
+                  <strong>Matches:</strong> {{ series.matches }}<br>
+                  <strong>Teams:</strong> {{ series.squads }}
+                </p>
+                <ul class="list-unstyled">
+                  <li><strong>ODI:</strong> {{ series.odi }}</li>
+                  <li><strong>T20:</strong> {{ series.t20 }}</li>
+                  <li><strong>Test:</strong> {{ series.test }}</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -86,9 +90,45 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 
+  .card {
+    width: 100%;
+    margin: 0 auto;
+  }
+
   .card:hover {
     transform: translateY(-5px);
     transition: transform 0.3s ease;
+  }
+
+  .card-fixed-height {
+    height: 400px;
+    position: relative;
+    padding: 1.25rem;
+  }
+
+  .scrollable-content {
+    height: calc(100% - 40px); /* Subtract the height of the title */
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+
+  /* Customizing scrollbar */
+  .scrollable-content::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollable-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  .scrollable-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+
+  .scrollable-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
 
   .score-section p {
@@ -114,11 +154,6 @@
 
   .swiper-pagination-bullet-active {
     background: #0d6efd;
-  }
-
-  .card {
-    width: 100%;
-    margin: 0 auto;
   }
 </style>
 
@@ -152,7 +187,7 @@
           spaceBetween: 30,
         },
       },
-      autoHeight: true,
+      autoHeight: false,
     });
 
     const seriesSwiper = new Swiper(".seriesSwiper", {
@@ -180,7 +215,7 @@
           spaceBetween: 30,
         },
       },
-      autoHeight: true,
+      autoHeight: false,
     });
   });
 </script>

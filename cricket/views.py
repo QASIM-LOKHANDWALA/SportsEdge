@@ -1,23 +1,13 @@
 from django.shortcuts import render
-from .api_functions import CricketDataAPI
+from .data_structure import CricketDataManager
 
-# Create your views here.
 def cricket_home_page(request):
-  try:
-    cricket_api = CricketDataAPI()
-    current_matches = cricket_api.get_current_matches()
-    cricket_series = cricket_api.get_series()
+    cricket_manager = CricketDataManager()
+    data = cricket_manager.refresh_data()
     
     context = {
-      'current_matches': current_matches,
-      'cricket_series': cricket_series
+        'current_matches': data['matches'],
+        'cricket_series': data['series']
     }
+    
     return render(request, 'cricket/cricket_home.html', context)
-    
-  except Exception as e:
-    context = {
-      'error_message': str(e),
-      'current_matches': [],
-      'cricket_series': []
-    }
-    return render(request, 'cricket_home.html', context)

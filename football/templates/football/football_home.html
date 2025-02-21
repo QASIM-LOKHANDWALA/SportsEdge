@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}Football{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light mt-3">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-5">Football Leagues</h2>
+    
+    <div class="mb-4 text-center">
+      <input type="text" id="leagueSearch" class="form-control w-50 mx-auto" placeholder="Search for a league...">
+      <button id="searchButton" class="btn btn-primary mt-2">Search</button>
+    </div>
+
+    <div class="swiper leaguesSwiper">
+      <div class="swiper-wrapper" id="leagueList">
+        {% if leagues %}
+        {% for league in leagues %}
+        <div class="swiper-slide league-item" data-name="{{ league.league.name }}" data-id="{{ league.league.id }}">
+          <div class="card border-0 shadow-custom">
+            <div class="card-body card-fixed-height">
+              <h5 class="card-title text-primary">{{ league.league.name }}</h5>
+              <img src="{{ league.league.logo }}" alt="{{ league.league.name }} Logo" class="img-fluid mb-3" width="50">
+              <p class="card-text">
+                <strong>Country:</strong> {{ league.country.name }}<br>
+                <strong>Type:</strong> {{ league.league.type }}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="swiper-slide">
+          <p class="text-muted text-center">No leagues available.</p>
+        </div>
+        {% endif %}
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .shadow-custom {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .card {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+  }
+
+  .card-fixed-height {
+    height: 250px;
+    position: relative;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .swiper {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 50px;
+  }
+
+  .swiper-slide {
+    height: auto;
+    padding: 10px;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #0d6efd;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: #0d6efd;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    new Swiper(".leaguesSwiper", {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 30,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+      },
+      autoHeight: false,
+    });
+
+    document.getElementById("searchButton").addEventListener("click", function() {
+      let searchValue = document.getElementById("leagueSearch").value;
+      if (!searchValue.trim()) {
+        alert("Please enter a league name.");
+        return;
+      }
+      
+      fetch(`http://127.0.0.1:8000/football/search/?q=${searchValue}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.leagues.length > 0) {
+            let leagueId = data.leagues[0].league.id;
+            window.location.href = `http://127.0.0.1:8000/football/league/${leagueId}/`;
+          } else {
+            alert("No matching league found.");
+          }
+        })
+        .catch(error => console.error("Error fetching leagues:", error));
+    });
+  });
+</script>
+{% endblock %}

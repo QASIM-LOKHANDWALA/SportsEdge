@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}League Details{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light mt-3">
+  <div class="container">
+    {% if league %}
+    <div class="card border-0 shadow-custom p-4">
+      <div class="text-center">
+        <img src="{{ league.league.logo }}" alt="{{ league.league.name }} Logo" class="img-fluid mb-3" width="100">
+        <h2 class="fw-bold">{{ league.league.name }}</h2>
+        <p><strong>Type:</strong> {{ league.league.type }}</p>
+      </div>
+      
+      <h4 class="mt-4">Current Season</h4>
+      {% if season %}
+      <p><strong>Year:</strong> {{ season.year }}</p>
+      <p><strong>Start Date:</strong> {{ season.start }}</p>
+      <p><strong>End Date:</strong> {{ season.end }}</p>
+      <p><strong>Ongoing:</strong> {{ season.current|yesno:"Yes,No" }}</p>
+      
+      <h4 class="mt-4">League Standings For Year 2023</h4>
+      {% if standings %}
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Team</th>
+            <th>Played</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for group in standings %}
+            {% for team in group %}
+            <tr>
+              <td>{{ team.rank }}</td>
+              <td><img src="{{ team.team.logo }}" width="20"> {{ team.team.name }}</td>
+              <td>{{ team.all.played }}</td>
+              <td>{{ team.points }}</td>
+            </tr>
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="text-muted">Standings data not available.</p>
+      {% endif %}
+      
+      <h4 class="mt-4">Top Scorers</h4>
+      {% if top_scorers %}
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Goals</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in top_scorers %}
+          <tr>
+            <td><img src="{{ player.player.photo }}" width="20"> {{ player.player.name }}</td>
+            <td><img src="{{ player.statistics.0.team.logo }}" width="20"> {{ player.statistics.0.team.name }}</td>
+            <td>{{ player.statistics.0.goals.total }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="text-muted">Top scorers data not available.</p>
+      {% endif %}
+      {% else %}
+      <p class="text-muted">No current season data available.</p>
+      {% endif %}
+    </div>
+    {% else %}
+    <p class="text-muted text-center">League details not available.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
