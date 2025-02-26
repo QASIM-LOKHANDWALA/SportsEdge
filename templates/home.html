@@ -1,4 +1,8 @@
-{% extends "layout.html" %} {% load static %} {% block title %}Home{% endblock%} 
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <section class="bg-gradient-custom text-white py-5">
@@ -14,18 +18,12 @@
         </p>
         <div class="d-flex gap-3">
           <a href="{% url "register" %}" class="btn btn-custom btn-primary">Get Started</a>
-          <a href="/about" class="btn btn-custom btn-outline-light"
-            >Learn More</a
-          >
+          {% comment %} <a href="/about" class="btn btn-custom btn-outline-light">Learn More</a> {% endcomment %}
         </div>
       </div>
       <div class="col-lg-6 mt-5 mt-lg-0 text-center">
-        <img
-          src="{% static 'images/hero.png' %}"
-          alt="Sports Illustration"
-          class="img-fluid"
-          style="max-width: 80%"
-        />
+        <img src="{% static 'images/hero.png' %}" alt="Sports Illustration"
+          class="img-fluid" style="max-width: 80%" />
       </div>
     </div>
   </div>
@@ -37,12 +35,10 @@
     <h2 class="text-center fw-bold mb-5">Popular Sports Categories</h2>
     <div class="row g-4">
       <!-- Cricket Card -->
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="card h-100 border-0 shadow-custom hover-effect">
           <div class="card-body text-center p-4">
-            <div
-              class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-block mb-4"
-            >
+            <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-block mb-4">
               <i class="fas fa-baseball-ball fa-2x text-primary"></i>
             </div>
             <h3 class="h5 mb-3">Cricket</h3>
@@ -50,41 +46,16 @@
               Follow live matches, get player statistics, and stay updated with
               international cricket news.
             </p>
-            <a href="/cricket" class="btn btn-custom btn-outline-primary"
-              >Explore Cricket</a
-            >
-          </div>
-        </div>
-      </div>
-
-      <!-- Basketball Card -->
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-custom hover-effect">
-          <div class="card-body text-center p-4">
-            <div
-              class="rounded-circle bg-warning bg-opacity-10 p-3 d-inline-block mb-4"
-            >
-              <i class="fas fa-basketball fa-2x text-warning"></i>
-            </div>
-            <h3 class="h5 mb-3">Basketball</h3>
-            <p class="text-muted mb-4">
-              Get NBA coverage, player profiles, game highlights, and global
-              basketball updates.
-            </p>
-            <a href="/basketball" class="btn btn-custom btn-outline-primary"
-              >Explore Basketball</a
-            >
+            <a href="/cricket" class="btn btn-custom btn-outline-primary">Explore Cricket</a>
           </div>
         </div>
       </div>
 
       <!-- Football Card -->
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="card h-100 border-0 shadow-custom hover-effect">
           <div class="card-body text-center p-4">
-            <div
-              class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-block mb-4"
-            >
+            <div class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-block mb-4">
               <i class="fas fa-futbol fa-2x text-success"></i>
             </div>
             <h3 class="h5 mb-3">Football</h3>
@@ -92,57 +63,19 @@
               Access match schedules, league tables, transfer news, and live
               football scores.
             </p>
-            <a href="/football" class="btn btn-custom btn-outline-primary"
-              >Explore Football</a
-            >
+            <a href="/football" class="btn btn-custom btn-outline-primary">Explore Football</a>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="row g-4 mt-2">
-      <!-- Chess Card -->
-      <div class="col-md-6">
-        <div class="card h-100 border-0 shadow-custom hover-effect">
-          <div class="card-body text-center p-4">
-            <div
-              class="rounded-circle bg-danger bg-opacity-10 p-3 d-inline-block mb-4"
-            >
-              <i class="fas fa-chess fa-2x text-danger"></i>
-            </div>
-            <h3 class="h5 mb-3">Chess</h3>
-            <p class="text-muted mb-4">
-              Follow tournaments, analyze games, and learn from grandmaster
-              strategies.
-            </p>
-            <a href="/chess" class="btn btn-custom btn-outline-primary"
-              >Explore Chess</a
-            >
-          </div>
-        </div>
-      </div>
-
-      <!-- Baseball Card -->
-      <div class="col-md-6">
-        <div class="card h-100 border-0 shadow-custom hover-effect">
-          <div class="card-body text-center p-4">
-            <div
-              class="rounded-circle bg-info bg-opacity-10 p-3 d-inline-block mb-4"
-            >
-              <i class="fas fa-baseball-ball fa-2x text-info"></i>
-            </div>
-            <h3 class="h5 mb-3">Baseball</h3>
-            <p class="text-muted mb-4">
-              Get MLB updates, player statistics, and comprehensive baseball
-              coverage.
-            </p>
-            <a href="/baseball" class="btn btn-custom btn-outline-primary"
-              >Explore Baseball</a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- Coming Soon Section -->
+<section class="py-5 text-center bg-secondary text-white">
+  <div class="container">
+    <h2 class="fw-bold mb-4">More Sports Coming Soon!</h2>
+    <p class="lead">Stay tuned for updates on new sports categories.</p>
   </div>
 </section>
 
@@ -157,4 +90,5 @@
     <a href="{% url "register" %}" class="btn btn-custom btn-light btn-lg">Sign Up Now</a>
   </div>
 </section>
+
 {% endblock %}

@@ -85,6 +85,69 @@
   </div>
 </section>
 
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="fw-bold position-relative d-inline-block">
+        Famous Cricket Players
+        <span class="section-underline"></span>
+      </h2>
+      <p class="text-muted mt-3">Explore the greatest cricket players in history</p>
+    </div>
+
+    <div class="search-container mb-5">
+      <div class="input-group w-75 mx-auto">
+        <input type="text" id="playerSearch" class="form-control" placeholder="Search for a player...">
+        <button id="playerSearchButton" class="btn btn-primary px-4">
+          <i class="fas fa-search me-2"></i><span class='search-text'>Search</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-4" id="playerResults">
+      {% for player in famous_players %}
+      <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-custom p-3">
+          <div class="text-center">
+            {% if player.image_path %}
+            <img src="{{ player.image_path }}" alt="{{ player.fullname }}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title text-primary text-center mb-3">{{ player.fullname }}</h5>
+            <div class="d-flex align-items-center justify-content-center mb-3">
+              {% if player.country_image_path %}
+              <img src="{{ player.country_image_path }}" alt="{{ player.country_name }}" width="25" class="me-2">
+              {% endif %}
+              <span>{{ player.country_name }}</span>
+            </div>
+            <div class="player-details">
+              {% if player.position %}
+              <p class="mb-2"><strong>Position:</strong> {{ player.position }}</p>
+              {% endif %}
+              {% if player.batting_style %}
+              <p class="mb-2"><strong>Batting Style:</strong> {{ player.batting_style }}</p>
+              {% endif %}
+              {% if player.bowling_style %}
+              <p class="mb-2"><strong>Bowling Style:</strong> {{ player.bowling_style }}</p>
+              {% endif %}
+              {% if player.date_of_birth %}
+              <p class="mb-2"><strong>Date of Birth:</strong> {{ player.date_of_birth|date:"d M Y" }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="text-muted text-center">No players available.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
 <style>
   .shadow-custom {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -107,7 +170,7 @@
   }
 
   .scrollable-content {
-    height: calc(100% - 40px); /* Subtract the height of the title */
+    height: calc(100% - 40px);
     overflow-y: auto;
     padding-right: 10px;
   }
@@ -154,6 +217,31 @@
 
   .swiper-pagination-bullet-active {
     background: #0d6efd;
+  }
+
+  .search-bar {
+    max-width: 600px; /* Limits the max width on large screens */
+    width: 90%; /* Makes it responsive on smaller screens */
+    margin: auto;
+  }
+
+  /* Adjust for smaller screens */
+  @media (max-width: 576px) {
+    .search-text{
+      display: none;
+    }
+    .search-bar {
+      flex-direction: column; /* Stack input and button */
+    }
+
+    .search-bar input {
+      border-radius: 5px 5px 0 0; /* Round top corners */
+    }
+
+    .search-bar button {
+      border-radius: 0 0 5px 5px; /* Round bottom corners */
+      width: 100%; /* Full width on small screens */
+    }
   }
 </style>
 
@@ -218,5 +306,53 @@
       autoHeight: false,
     });
   });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("playerSearchButton").addEventListener("click", function() {
+    let searchValue = document.getElementById("playerSearch").value.trim();
+    if (!searchValue) {
+      alert("Please enter a player name.");
+      return;
+    }
+    
+    fetch(`/cricket/search_player/?q=${encodeURIComponent(searchValue)}`)
+      .then(response => response.json())
+      .then(data => {
+        let playerResults = document.getElementById("playerResults");
+        playerResults.innerHTML = "";
+        
+        if (data.players.length > 0) {
+          data.players.forEach(player => {
+            let playerCard = `
+              <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-custom p-3">
+                  <div class="text-center">
+                    ${player.image_path ? `<img src="${player.image_path}" alt="${player.fullname}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">` : ''}
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title text-primary text-center mb-3">${player.fullname}</h5>
+                    <div class="d-flex align-items-center justify-content-center mb-3">
+                      ${player.country_image_path ? `<img src="${player.country_image_path}" alt="${player.country_name}" width="25" class="me-2">` : ''}
+                      <span>${player.country_name}</span>
+                    </div>
+                    <div class="player-details">
+                      ${player.position ? `<p class="mb-2"><strong>Position:</strong> ${player.position}</p>` : ''}
+                      ${player.batting_style ? `<p class="mb-2"><strong>Batting Style:</strong> ${player.batting_style}</p>` : ''}
+                      ${player.bowling_style ? `<p class="mb-2"><strong>Bowling Style:</strong> ${player.bowling_style}</p>` : ''}
+                      ${player.date_of_birth ? `<p class="mb-2"><strong>Date of Birth:</strong> ${new Date(player.date_of_birth).toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'})}</p>` : ''}
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+            playerResults.innerHTML += playerCard;
+          });
+        } else {
+          playerResults.innerHTML = '<div class="col-12"><p class="text-muted text-center">No players found.</p></div>';
+        }
+      })
+      .catch(error => console.error("Error fetching players:", error));
+  });
+});
 </script>
 {% endblock %}

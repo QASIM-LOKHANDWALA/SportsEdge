@@ -6,11 +6,21 @@
 {% block content %}
 <section class="py-5 bg-light mt-3">
   <div class="container">
-    <h2 class="text-center fw-bold mb-5">Football Leagues</h2>
+    <div class="section-header text-center mb-5">
+      <h2 class="fw-bold position-relative d-inline-block">
+        Football Leagues
+        <span class="section-underline"></span>
+      </h2>
+      <p class="text-muted mt-3">Discover professional football leagues around the globe</p>
+    </div>
     
-    <div class="mb-4 text-center">
-      <input type="text" id="leagueSearch" class="form-control w-50 mx-auto" placeholder="Search for a league...">
-      <button id="searchButton" class="btn btn-primary mt-2">Search</button>
+    <div class="search-container mb-5">
+      <div class="input-group w-75 mx-auto">
+        <input type="text" id="leagueSearch" class="form-control" placeholder="Search for a league...">
+        <button id="searchButton" class="btn btn-primary px-4">
+          <i class="fas fa-search me-2"></i><span class='search-text'>Search</span>
+        </button>
+      </div>
     </div>
 
     <div class="swiper leaguesSwiper">
@@ -43,7 +53,65 @@
   </div>
 </section>
 
+<section class="players-section py-5 bg-light">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="fw-bold position-relative d-inline-block">
+        Famous Players
+        <span class="section-underline"></span>
+      </h2>
+      <p class="text-muted mt-3">Meet the stars of the beautiful game</p>
+    </div>
+
+    <div class="search-container mb-5">
+      <div class="input-group w-75 mx-auto">
+        <input type="text" id="playerSearch" class="form-control" placeholder="Search for a player...">
+        <button id="playerSearchButton" class="btn btn-primary px-4">
+          <i class="fas fa-search me-2"></i><span class='search-text'>Search</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-4" id="playerResults">
+      {% for player in famous_players %}
+      <div class="col-md-4">
+        <div class="player-card">
+          <div class="player-card-content">
+            <h5 class="player-name">{{ player.full_name }}</h5>
+            <div class="player-stats">
+              <div class="stat-item">
+                <i class="fas fa-user-alt"></i>
+                <span>Age: {{ player.age }}</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-flag"></i>
+                <span>{{ player.nationality }}</span>
+              </div>
+              <div class="stat-item rating">
+                <i class="fas fa-star"></i>
+                <span>Rating: {{ player.overall_rating }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-muted text-center">No famous players available.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
 <style>
+  /* Search Container */
+  .search-container {
+    transition: all 0.3s ease;
+  }
+
+  .search-container:hover {
+    transform: translateY(-2px);
+  }
+
   .shadow-custom {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
@@ -84,10 +152,176 @@
   .swiper-pagination-bullet-active {
     background: #0d6efd;
   }
+
+  /* Player Cards */
+  .player-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+
+  .player-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .player-card-content {
+    padding: 2rem;
+  }
+
+  .player-name {
+    color: #0d6efd;
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .player-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #6c757d;
+  }
+
+  .stat-item.rating {
+    color: #ffc107;
+    font-weight: 600;
+  }
+
+  .search-bar {
+    max-width: 600px; /* Limits the max width on large screens */
+    width: 90%; /* Makes it responsive on smaller screens */
+    margin: auto;
+  }
+
+  /* Adjust for smaller screens */
+  @media (max-width: 576px) {
+    .search-text{
+      display: none;
+    }
+    .search-bar {
+      flex-direction: column; /* Stack input and button */
+    }
+
+    .search-bar input {
+      border-radius: 5px 5px 0 0; /* Round top corners */
+    }
+
+    .search-bar button {
+      border-radius: 0 0 5px 5px; /* Round bottom corners */
+      width: 100%; /* Full width on small screens */
+    }
+  }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("playerSearchButton").addEventListener("click", function() {
+      let searchValue = document.getElementById("playerSearch").value.trim();
+      if (!searchValue) {
+        alert("Please enter a player name.");
+        return;
+      }
+      
+      fetch(`/football/search_player/?q=${encodeURIComponent(searchValue)}`)
+        .then(response => response.json())
+        .then(data => {
+          let playerResults = document.getElementById("playerResults");
+          playerResults.innerHTML = "";
+          
+          if (data.players.length > 0) {
+            data.players.forEach(player => {
+              let playerCard = `<div class='col-md-4'>
+                <div class='card border-0 shadow-custom p-3'>
+                  <h5 class='card-title text-primary'>${player.full_name}</h5>
+                  <p><strong>Age:</strong> ${player.age}</p>
+                  <p><strong>Nationality:</strong> ${player.nationality}</p>
+                  <p><strong>Overall Rating:</strong> ${player.overall_rating}</p>
+                </div>
+              </div>`;
+              playerResults.innerHTML += playerCard;
+            });
+          } else {
+            playerResults.innerHTML = "<p class='text-muted text-center'>No players found.</p>";
+          }
+        })
+        .catch(error => console.error("Error fetching players:", error));
+    });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById("leagueSearch");
+    const searchButton = document.getElementById("searchButton");
+
+    function handleSearch() {
+        let searchValue = searchInput.value.trim();
+        
+        if (!searchValue) {
+            alert("Please enter a league name.");
+            return;
+        }
+
+        searchButton.disabled = true;
+        searchButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Searching...';
+        
+        fetch(`/football/search/?q=${encodeURIComponent(searchValue)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("API Response:", data);
+
+                if (data && Array.isArray(data.leagues) && data.leagues.length > 0) {
+                    let league = data.leagues[0]; 
+                    if (league && league.league && league.league.id) {
+                        window.location.href = `/football/league/${league.league.id}/`;
+                    } else {
+                        alert("Invalid league data received.");
+                    }
+                } else {
+                    alert("No matching league found.");
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching leagues:", error);
+                alert("An error occurred while searching. Please try again.");
+            })
+            .finally(() => {
+                searchButton.disabled = false;
+                searchButton.innerHTML = '<i class="fas fa-search me-2"></i> Search';
+            });
+    }
+
+    if (searchButton) {
+        searchButton.addEventListener("click", handleSearch);
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                handleSearch();
+            }
+        });
+    }
+  });
+</script>
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
@@ -118,26 +352,6 @@
       },
       autoHeight: false,
     });
-
-    document.getElementById("searchButton").addEventListener("click", function() {
-      let searchValue = document.getElementById("leagueSearch").value;
-      if (!searchValue.trim()) {
-        alert("Please enter a league name.");
-        return;
-      }
-      
-      fetch(`http://127.0.0.1:8000/football/search/?q=${searchValue}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.leagues.length > 0) {
-            let leagueId = data.leagues[0].league.id;
-            window.location.href = `http://127.0.0.1:8000/football/league/${leagueId}/`;
-          } else {
-            alert("No matching league found.");
-          }
-        })
-        .catch(error => console.error("Error fetching leagues:", error));
-    });
-  });
+  })
 </script>
 {% endblock %}
